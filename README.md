@@ -9,7 +9,7 @@ This is my solutions of [Gophercises](https://gophercises.com/)
 - Various parts of the standard library (io, time, and many other package)
 # Exercises
 - [x] Quiz Game
-- [ ] URL Shortener
+- [x] URL Shortener
 - [ ] Choose Your Own Adventure
 - [ ] HTML Link Parser
 - [ ] Sitemap Builder
