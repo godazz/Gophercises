@@ -6,7 +6,7 @@ This is my solutions of [Gophercises](https://gophercises.com/)
 - Goroutines
 - Functional Options
 - Chaining Interfaces
-- Various parts of the standard library (io, time, and many other package
+- Various parts of the standard library (io, time, and many other package)
 # Exercises
 - [x] Quiz Game
 - [ ] URL Shortener
