@@ -1,8 +1,16 @@
 package urlshort
 
 import (
+	"fmt"
 	"net/http"
+
+	"gopkg.in/yaml.v2"
 )
+
+type yamlStruct struct {
+	path string `yaml:"path, inline"`
+	url  string `yaml:"url, inline"`
+}
 
 // MapHandler will return an http.HandlerFunc (which also
 // implements http.Handler) that will attempt to map any
@@ -12,7 +20,15 @@ import (
 // http.Handler will be called instead.
 func MapHandler(pathsToUrls map[string]string, fallback http.Handler) http.HandlerFunc {
 	//	TODO: Implement this...
-	return nil
+	return func(w http.ResponseWriter, r *http.Request) {
+		path := r.URL.Path
+
+		if longURL, ok := pathsToUrls[path]; ok {
+			http.Redirect(w, r, longURL, http.StatusMovedPermanently)
+		} else {
+			fallback.ServeHTTP(w, r)
+		}
+	}
 }
 
 // YAMLHandler will parse the provided YAML and then return
@@ -31,7 +47,38 @@ func MapHandler(pathsToUrls map[string]string, fallback http.Handler) http.Handl
 //
 // See MapHandler to create a similar http.HandlerFunc via
 // a mapping of paths to urls.
-func YAMLHandler(yml []byte, fallback http.Handler) (http.HandlerFunc, error) {
-	// TODO: Implement this...
-	return nil, nil
+
+type yamlData struct {
+	Path string
+	Url  string
+}
+
+func YAMLHandler(data []byte, fallback http.Handler) (http.HandlerFunc, error) {
+	parsedYAML, err := parseYAML(data)
+	fmt.Println(parsedYAML)
+	if err != nil {
+		return nil, err
+	}
+	pathMap := buildMap(parsedYAML)
+	fmt.Println(pathMap)
+
+	return MapHandler(pathMap, fallback), nil
+}
+
+func parseYAML(data []byte) ([]yamlData, error) {
+	var parsedYAML []yamlData
+	err := yaml.Unmarshal([]byte(data), &parsedYAML)
+	if err != nil {
+		return nil, err
+	}
+	return parsedYAML, nil
+}
+
+func buildMap(parsedYAML []yamlData) map[string]string {
+	mp := make(map[string]string)
+
+	for _, v := range parsedYAML {
+		mp[v.Path] = v.Url
+	}
+	return mp
 }
