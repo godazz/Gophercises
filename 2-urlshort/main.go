@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -31,7 +31,7 @@ func main() {
 	}
 	defer ymlFile.Close()
 
-	yaml, err := ioutil.ReadAll(ymlFile)
+	yaml, err := io.ReadAll(ymlFile)
 	if err != nil {
 		log.Fatal(err)
 	}
