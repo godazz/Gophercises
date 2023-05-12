@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"time"
 )
@@ -13,6 +14,7 @@ func main() {
 
 	fileName := flag.String("csv", "problems.csv", "CSV File that conatins quiz questions")
 	timeLimit := flag.Int("limit", 30, "Time Limit of the quiz")
+	suffle := flag.Bool("shuffle", false, "Shuffle the Question each run")
 	flag.Parse()
 
 	file, err := os.Open(*fileName)
@@ -27,6 +29,12 @@ func main() {
 	Questions, err := r.ReadAll()
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	if *suffle {
+		rand.Shuffle(len(Questions), func(i, j int) {
+			Questions[i], Questions[j] = Questions[j], Questions[i]
+		})
 	}
 
 	var userAnswer string
