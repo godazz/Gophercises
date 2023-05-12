@@ -6,11 +6,13 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 )
 
 func main() {
 
 	fileName := flag.String("csv", "problems.csv", "CSV File that conatins quiz questions")
+	timeLimit := flag.Int("limit", 30, "Time Limit of the quiz")
 	flag.Parse()
 
 	file, err := os.Open(*fileName)
@@ -30,19 +32,25 @@ func main() {
 	var userAnswer string
 	var correctAnswers int
 
-	for i, record := range Questions { // record[0] -> Question, record[1] -> Correct Answer
+	timer := time.NewTimer(time.Duration(*timeLimit) * time.Second)
+	for i, record := range Questions {
 		fmt.Printf("%d. %s\n", i+1, string(record[0]))
-		fmt.Scan(&userAnswer)
+		answerCh := make(chan string)
+		go func() {
+			fmt.Scan(&userAnswer)
+			answerCh <- userAnswer
+		}()
 
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		if record[1] == userAnswer {
-			correctAnswers++
+		select {
+		case <-timer.C:
+			fmt.Printf("There were %d Question, you got %d correctly!\n", len(Questions), correctAnswers)
+			return
+		case userAnswer := <-answerCh:
+			if record[1] == userAnswer {
+				correctAnswers++
+			}
 		}
 	}
 
 	fmt.Printf("There were %d Question, you got %d correctly!\n", len(Questions), correctAnswers)
-
 }
