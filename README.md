@@ -18,7 +18,6 @@ This is my solutions of [Gophercises](https://gophercises.com/)
 - [ ] Phone Number Normalizer
 - [ ] Deck of Cards
 - [ ] Blackjack
-- [ ] Blackjack AI
 - [ ] File Renaming Tool
 - [ ] Quiet HN
 - [ ] Recover Middleware
