@@ -10,7 +10,7 @@ This is my solutions of [Gophercises](https://gophercises.com/)
 # Exercises
 - [x] Quiz Game
 - [x] URL Shortener
-- [ ] Choose Your Own Adventure
+- [x] Choose Your Own Adventure
 - [ ] HTML Link Parser
 - [ ] Sitemap Builder
 - [ ] hr1
