@@ -11,7 +11,7 @@ This is my solutions of [Gophercises](https://gophercises.com/)
 - [x] Quiz Game
 - [x] URL Shortener
 - [x] Choose Your Own Adventure
-- [ ] HTML Link Parser
+- [x] HTML Link Parser
 - [ ] Sitemap Builder
 - [ ] hr1
 - [ ] CLI Task Manager
