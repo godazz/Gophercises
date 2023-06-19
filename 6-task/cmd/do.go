@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"strconv"
 
+	"github.com/Gophercises/task/internals"
 	"github.com/spf13/cobra"
 )
 
@@ -11,7 +13,15 @@ var doCmd = &cobra.Command{
 	Use:   "do",
 	Short: "Mark a task on your TODO list as complete",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("mark a task as complete...")
+		if len(args) == 0 {
+			internals.Exitf("Missing Task ID")
+		}
+
+		taskID, err := strconv.Atoi(args[0])
+		if err != nil {
+			internals.Exitf("%v", err)
+		}
+		fmt.Printf("mark task %d as complete...\n", taskID)
 	},
 }
 
