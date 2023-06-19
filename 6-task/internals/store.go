@@ -12,9 +12,9 @@ const (
 )
 
 type Task struct {
-	ID        int
-	Title     string
-	Completed bool
+	ID        int    `json:"id"`
+	Title     string `json:"title"`
+	Completed bool   `json:"completed"`
 }
 
 func connectDB() *bolt.DB {
@@ -25,15 +25,20 @@ func connectDB() *bolt.DB {
 	return db
 }
 
+func createBucket(tx *bolt.Tx) *bolt.Bucket {
+	b, err := tx.CreateBucketIfNotExists([]byte(tasksBucketName))
+	if err != nil {
+		Exitf("%v", err)
+	}
+	return b
+}
+
 func CreateTask(task *Task) error {
 	db := connectDB()
 	defer db.Close()
 	return db.Update(func(tx *bolt.Tx) error {
 
-		b, err := tx.CreateBucketIfNotExists([]byte(tasksBucketName))
-		if err != nil {
-			return err
-		}
+		b := createBucket(tx)
 		id, err := b.NextSequence()
 		if err != nil {
 			return err
@@ -49,10 +54,33 @@ func CreateTask(task *Task) error {
 	})
 }
 
-func ListTasks() (*[]Task, error) {
-	return nil, nil
+func ListTasks() ([]*Task, error) {
+
+	db := connectDB()
+	defer db.Close()
+
+	var tasks []*Task
+	db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(tasksBucketName))
+
+		b.ForEach(func(_, v []byte) error {
+			var task Task
+			if err := json.Unmarshal(v, &task); err != nil {
+				return err
+			}
+			tasks = append(tasks, &task)
+			return nil
+		})
+		return nil
+	})
+
+	return tasks, nil
 }
 
 func MarkTaskAsCompleted(taskID int) error {
+
+	db := connectDB()
+	defer db.Close()
+
 	return nil
 }

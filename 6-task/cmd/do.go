@@ -21,7 +21,9 @@ var doCmd = &cobra.Command{
 		if err != nil {
 			internals.Exitf("%v", err)
 		}
-		fmt.Printf("mark task %d as complete...\n", taskID)
+		if err := internals.MarkTaskAsCompleted(taskID); err != nil {
+			fmt.Printf("You have completed the task.\n")
+		}
 	},
 }
 
