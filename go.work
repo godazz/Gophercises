@@ -4,4 +4,5 @@ use (
 	./2-urlshort
 	./4-link
 	./5-sitemap
+	./6-task
 )

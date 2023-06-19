@@ -13,7 +13,6 @@ This is my solutions of [Gophercises](https://gophercises.com/)
 - [x] Choose Your Own Adventure
 - [x] HTML Link Parser
 - [ ] Sitemap Builder
-- [ ] hr1
 - [ ] CLI Task Manager
 - [ ] Phone Number Normalizer
 - [ ] Deck of Cards
