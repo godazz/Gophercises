@@ -8,10 +8,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// doCmd represents the do command
-var doCmd = &cobra.Command{
-	Use:   "do",
-	Short: "Mark a task on your TODO list as complete",
+// rmCmd represents the rm command
+var rmCmd = &cobra.Command{
+	Use:   "rm",
+	Short: "delte a task from your TODO list",
+
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			internals.Exitf("Missing Task ID")
@@ -21,14 +22,14 @@ var doCmd = &cobra.Command{
 		if err != nil {
 			internals.Exitf("%v", err)
 		}
-		taskTitle, err := internals.MarkTaskAsCompleted(taskID)
+		taskTitle, err := internals.DeleteTask(taskID)
 		if err != nil {
 			internals.Exitf("%v", err)
 		}
-		fmt.Printf("You have completed the %q task.", taskTitle)
+		fmt.Printf("You have deleted the %q task.", taskTitle)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(doCmd)
+	rootCmd.AddCommand(rmCmd)
 }

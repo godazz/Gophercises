@@ -8,22 +8,23 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// listCmd represents the list command
-var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List all of your incomplete tasks",
+// completedCmd represents the completed command
+var completedCmd = &cobra.Command{
+	Use:   "completed",
+	Short: "List all of your complete tasks",
+
 	Run: func(cmd *cobra.Command, args []string) {
-		tasks, err := internals.ListTasks(false)
+		tasks, err := internals.ListTasks(true)
 		if err != nil {
 			internals.Exitf("%v", err)
 		}
 
 		if len(tasks) == 0 {
-			fmt.Println("there are no incompleted tasks")
+			fmt.Println("there are no completed tasks")
 			os.Exit(0)
 		}
 
-		fmt.Println("You have the following tasks:")
+		fmt.Println("You have finished the following tasks:")
 		for _, t := range tasks {
 			fmt.Printf("%d. %s\n", t.ID, t.Title)
 		}
@@ -31,5 +32,5 @@ var listCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(listCmd)
+	rootCmd.AddCommand(completedCmd)
 }

@@ -54,7 +54,7 @@ func CreateTask(task *Task) error {
 	})
 }
 
-func ListTasks() ([]*Task, error) {
+func ListTasks(isCompleted bool) ([]*Task, error) {
 
 	db := connectDB()
 	defer db.Close()
@@ -68,6 +68,9 @@ func ListTasks() ([]*Task, error) {
 			if err := json.Unmarshal(v, &task); err != nil {
 				return err
 			}
+			if task.Completed != isCompleted {
+				return nil
+			}
 			tasks = append(tasks, &task)
 			return nil
 		})
@@ -77,10 +80,51 @@ func ListTasks() ([]*Task, error) {
 	return tasks, nil
 }
 
-func MarkTaskAsCompleted(taskID int) error {
+func MarkTaskAsCompleted(taskID int) (string, error) {
 
 	db := connectDB()
 	defer db.Close()
 
-	return nil
+	var task Task
+	db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(tasksBucketName))
+		taskRecord := b.Get(Itob(taskID))
+
+		if taskRecord == nil {
+			Exitf("task not found with Id=%d", taskID)
+		}
+
+		if err := json.Unmarshal(taskRecord, &task); err != nil {
+			return err
+		}
+
+		task.Completed = true
+		taskRecord, err := json.Marshal(&task)
+		if err != nil {
+			return err
+		}
+		return b.Put(Itob(task.ID), taskRecord)
+	})
+	return task.Title, nil
+}
+
+func DeleteTask(taskID int) (string, error) {
+	db := connectDB()
+	defer db.Close()
+
+	var task Task
+	db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(tasksBucketName))
+		taskRecord := b.Get(Itob(taskID))
+
+		if taskRecord == nil {
+			Exitf("task not found with Id=%d", taskID)
+		}
+
+		if err := json.Unmarshal(taskRecord, &task); err != nil {
+			return err
+		}
+		return b.Delete(Itob(taskID))
+	})
+	return task.Title, nil
 }
