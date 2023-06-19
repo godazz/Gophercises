@@ -13,7 +13,7 @@ This is my solutions of [Gophercises](https://gophercises.com/)
 - [x] Choose Your Own Adventure
 - [x] HTML Link Parser
 - [ ] Sitemap Builder
-- [ ] CLI Task Manager
+- [x] CLI Task Manager
 - [ ] Phone Number Normalizer
 - [ ] Deck of Cards
 - [ ] Blackjack
