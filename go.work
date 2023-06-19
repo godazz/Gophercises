@@ -3,4 +3,5 @@ go 1.20
 use (
 	./2-urlshort
 	./4-link
+	./5-sitemap
 )
