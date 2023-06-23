@@ -1,4 +1,4 @@
-module github.com/Gophercises/task
+module github.com/Gophercises/godazz/task
 
 go 1.20
 

@@ -5,4 +5,5 @@ use (
 	./4-link
 	./5-sitemap
 	./6-task
+	./8-phone
 )
