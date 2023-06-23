@@ -1,6 +1,6 @@
 package main
 
-import "github.com/Gophercises/godazz/task/cmd"
+import "github.com/godazz/Gophercises/task/cmd"
 
 func main() {
 	cmd.Execute()
